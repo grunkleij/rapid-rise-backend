@@ -6,18 +6,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // 1. Enable Validation (checks DTOs)
   app.useGlobalPipes(new ValidationPipe());
 
-  // 2. Setup Swagger
   const config = new DocumentBuilder()
     .setTitle('Rapid Rise Backend')
-    .setDescription('The API description for the assignment')
-    .setVersion('1.0')
-    .addBearerAuth() // Adds the "Authorize" button for JWT later
+    .setDescription('RESTful API documentation for the Rapid Raise assignment. Features include JWT Authentication, Task Management, and Database-Backed File Uploads.').setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document); // Access at /api
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
 }
