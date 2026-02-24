@@ -6,16 +6,19 @@ export class File {
     id: number;
 
     @Column()
-    originalName: string; 
+    originalName: string;
 
     @Column()
-    uniqueFilename: string; 
+    uniqueFilename: string;
 
     @Column()
     mimeType: string;
 
     @Column()
     size: number;
+
+    @Column()
+    userId: number;
 
     @CreateDateColumn()
     createdAt: Date;

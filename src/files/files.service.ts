@@ -12,17 +12,24 @@ export class FilesService {
     private fileRepository : Repository<File>,
   ){}
 
-  async saveFileMetaData(file : Express.Multer.File){
+  async saveFileMetaData(file : Express.Multer.File, userId : number){
     const newFile = this.fileRepository.create({
       originalName : file.originalname,
       uniqueFilename : file.filename,
       mimeType : file.mimetype,
-      size : file.size
+      size : file.size,
+      userId : userId
     })
 
     return this.fileRepository.save(newFile);
   }
 
+  async getFilesByUser(userId: number) {
+    return this.fileRepository.find({
+      where: { userId: userId },
+      order: { createdAt: 'DESC' }, 
+    });
+  }
 
   async getFileById(id : number){
     const file = await this.fileRepository.findOne({where : {id}})
