@@ -14,9 +14,9 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+ describe('root', () => {
+    it('should return a link to the Swagger API', () => { 
+      expect(appController.getHello()).toBe('<a style="  font-weight:bold;" href="/api"> Go to the swagger api>></a>');
     });
   });
 });
