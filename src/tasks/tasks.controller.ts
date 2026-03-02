@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, UnauthorizedException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -19,7 +19,10 @@ export class TasksController {
   create(@Body() createTaskDto: CreateTaskDto, @Req() req: any) {
     console.log(req.user)
 
-        const userId = req.user.id || req.user.userId;
+    const userId = req.user.userId;
+    if (!userId) {
+      throw new UnauthorizedException('Access denied: User ID is missing from token.');
+    }
 
     return this.tasksService.create(createTaskDto, userId);
   }
@@ -28,8 +31,8 @@ export class TasksController {
   @ApiOperation({ summary: 'Retrieve all tasks' })
   @ApiResponse({ status: 200, description: 'List of all tasks retrieved successfully.' })
   findAll(@Req() req: any) {
-        const userId = req.user.id || req.user.userId;
-;
+    const userId = req.user.id || req.user.userId;
+    ;
     return this.tasksService.findAll(userId);
   }
 
@@ -39,8 +42,10 @@ export class TasksController {
   @ApiResponse({ status: 200, description: 'The requested task.' })
   @ApiResponse({ status: 404, description: 'Task not found.' })
   findOne(@Param('id') id: string, @Req() req: any) {
-        const userId = req.user.id || req.user.userId;
-;
+    const userId = req.user.userId;
+    if (!userId) {
+      throw new UnauthorizedException('Access denied: User ID is missing from token.');
+    }
 
     return this.tasksService.findOne(+id, userId);
   }
@@ -52,8 +57,10 @@ export class TasksController {
   @ApiResponse({ status: 404, description: 'Task not found.' })
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto, @Req() req: any) {
     console.log('RECEIVED UPDATE DATA:', updateTaskDto);
-        const userId = req.user.id || req.user.userId;
-;
+    const userId = req.user.userId;
+    if (!userId) {
+      throw new UnauthorizedException('Access denied: User ID is missing from token.');
+    }
 
     return this.tasksService.update(+id, updateTaskDto, userId);
   }
@@ -64,8 +71,10 @@ export class TasksController {
   @ApiResponse({ status: 200, description: 'The task has been successfully deleted.' })
   @ApiResponse({ status: 404, description: 'Task not found.' })
   remove(@Param('id') id: string, @Req() req: any) {
-        const userId = req.user.id || req.user.userId;
-;
+    const userId = req.user.userId;
+    if (!userId) {
+      throw new UnauthorizedException('Access denied: User ID is missing from token.');
+    }
 
     return this.tasksService.remove(+id, userId);
   }

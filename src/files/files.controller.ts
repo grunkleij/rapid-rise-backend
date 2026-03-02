@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Param, UseInterceptors, UploadedFile, UseGuards, Res, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, NotFoundException, StreamableFile, UploadedFiles, Req } from '@nestjs/common';
+import { Controller, Post, Get, Param, UseInterceptors, UploadedFile, UseGuards, Res, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, NotFoundException, StreamableFile, UploadedFiles, Req, UnauthorizedException } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiBearerAuth, ApiConsumes, ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
@@ -99,7 +99,11 @@ export class FilesController {
   @Get()
     @ApiOperation({ summary: 'Get a list of all files uploaded by the current user' })
     async getUserFiles(@Req() req: any) {
-      const userId = req.user.id; 
+      const userId = req.user.userId; 
+      if (!userId) {
+      throw new UnauthorizedException('Access denied: User ID is missing from token.');
+    }
+      console.log(userId)
       
       const files = await this.fileService.getFilesByUser(userId);
 
