@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("files")
 export class File {
@@ -19,6 +20,10 @@ export class File {
 
     @Column()
     userId: number;
+
+    @ManyToOne(() => User, user => user.files, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'userId' })
+    user: User;
 
     @CreateDateColumn()
     createdAt: Date;

@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { File } from 'src/files/entities/file.entity';
+import { Task } from 'src/tasks/entities/task.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -13,5 +15,11 @@ export class User {
 
   @Column()
   password: string; 
-  
+
+  @OneToMany(() => File, file => file.user)
+  files: File[];
+
+  @OneToMany(() => Task, task => task.user)
+  tasks: Task[];
 }
+  

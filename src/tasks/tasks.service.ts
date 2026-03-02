@@ -12,29 +12,31 @@ export class TasksService {
     private tasksRepository: Repository<Task>,
   ) { }
 
-  create(createTaskDto: CreateTaskDto) {
-    const newTask = this.tasksRepository.create(createTaskDto);
+  create(createTaskDto: CreateTaskDto, userId : number) {
+    const newTask = this.tasksRepository.create({...createTaskDto,
+      userId : userId
+    });
     return this.tasksRepository.save(newTask);
   }
 
-  findAll() {
-    return this.tasksRepository.find()
+  findAll(userId : number) {
+    return this.tasksRepository.find({where : {userId}})
   }
 
-  async findOne(id: number) {
-    const task = await this.tasksRepository.findOne({ where: { id } })
+  async findOne(id: number, userId : number) {
+    const task = await this.tasksRepository.findOne({ where: { id, userId } })
     if (!task) throw new NotFoundException(`Task #${id} not found`);
     return task;
   }
 
-  async update(id: number, updateTaskDto: UpdateTaskDto) {
-    const task = await this.findOne(id)
+  async update(id: number, updateTaskDto: UpdateTaskDto, userId: number) {
+    const task = await this.findOne(id,userId)
     Object.assign(task, updateTaskDto);
     return this.tasksRepository.save(task);
   }
 
-  async remove(id: number) {
-    const task = await this.findOne(id)
+  async remove(id: number, userId : number) {
+    const task = await this.findOne(id, userId)
     return this.tasksRepository.remove(task)
   }
 }

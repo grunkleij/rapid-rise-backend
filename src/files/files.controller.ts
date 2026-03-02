@@ -47,7 +47,7 @@ export class FilesController {
         validators: [
           new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),
           new FileTypeValidator({
-            fileType: /^(image\/(png|jpe?g|gif)|text\/(plain|csv)|application\/(pdf|zip|x-zip-compressed|msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document|vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet|wps-office\.docx))$/,
+            fileType: /^(image\/(png|jpe?g|gif|webp)|text\/(plain|csv)|application\/(pdf|zip|x-zip-compressed|msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document|vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet|wps-office\.docx))$/,
             skipMagicNumbersValidation: true,
           }),
         ]
